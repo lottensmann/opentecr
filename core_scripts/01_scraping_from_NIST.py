@@ -3,6 +3,9 @@
 Created on Mon May 16 09:24:58 2022
 
 @author: Andrew Freiburger
+
+modified by Linda Ottensmann
+13.12.2023
 """
 from requests.packages.urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
@@ -150,7 +153,7 @@ class TECRDB():
         # export the dataframe
         if not os.path.exists('TECRDB'):
             os.mkdir('TECRDB')
-        self.scraped_df.to_csv('TECRDB/TECRDB_scrape.csv')
+        self.scraped_df.to_csv('TECRDB/TECRDB_scrape_v2.csv')
         # with ZipFile('TECRDB.zip', 'w', compression = ZIP_LZMA) as zip:
         #     zip.write('TECRDB_scrape.csv')
         #     os.remove('TECRDB_scrape.csv')
@@ -277,7 +280,7 @@ class TECRDB():
             }, inplace = True)
         
         self.amalgamated_df = df
-        self.amalgamated_df.to_csv("TECRDB/amalgamated_TECRDB_scrape.csv") 
+        self.amalgamated_df.to_csv("TECRDB/amalgamated_TECRDB_scrape_v2.csv") 
             
         # count down for processing and organizing the data
         def assign_values(col, reference_list, values_list, temperatures_list, ph_list, added):
@@ -368,7 +371,7 @@ class TECRDB():
             count += 1
         
         #export the database dictionary as a JSON file
-        with open('TECRDB/TECRDB_consolidated.json', 'w') as output:
+        with open('TECRDB/TECRDB_consolidated_v2.json', 'w') as output:
             json.dump(data_per_enzyme, output, indent = 4)
         # sleep(2)
         # with ZipFile('TECRDB.zip', 'w', compression = ZIP_LZMA) as zip:
