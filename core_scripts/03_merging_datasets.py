@@ -1,3 +1,13 @@
+"""
+
+@author: Andrew Freiburger
+
+modified by Linda Ottensmann on 14.12.2023
+
+Merges scrapings from data sets NIST, Noor and Du.
+
+"""
+
 from pandas import read_csv, DataFrame, read_excel
 from openpyxl import load_workbook
 from itertools import islice

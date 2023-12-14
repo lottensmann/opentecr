@@ -1,3 +1,15 @@
+"""
+
+@author: Andrew Freiburger
+
+modified by Linda Ottensmann on 14.12.2023
+
+Compares scrapings from data sets NIST, Noor and Du.
+
+"""
+
+
+
 import re
 
 
