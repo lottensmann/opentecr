@@ -4,8 +4,10 @@ Created on Mon May 16 09:24:58 2022
 
 @author: Andrew Freiburger
 
-modified by Linda Ottensmann
-13.12.2023
+modified by Linda Ottensmann on 13.12.2023
+
+Scrapes data from NIST database
+
 """
 from requests.packages.urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
@@ -24,6 +26,8 @@ class TECRDB():
         # defining the website
         self.printing = printing
         
+     #scrapes data from NIST
+     #output: TECRDB/amalgamated_TECRDB_scrape.csv   
     def scrape(self,):
         root_url = "https://randr.nist.gov/enzyme/DataDetails.aspx?ID="
         end_url = "&finalterm=&data=enzyme"
@@ -153,11 +157,13 @@ class TECRDB():
         # export the dataframe
         if not os.path.exists('TECRDB'):
             os.mkdir('TECRDB')
-        self.scraped_df.to_csv('TECRDB/TECRDB_scrape_v2.csv')
+        self.scraped_df.to_csv('TECRDB/TECRDB_scrape.csv')
         # with ZipFile('TECRDB.zip', 'w', compression = ZIP_LZMA) as zip:
         #     zip.write('TECRDB_scrape.csv')
         #     os.remove('TECRDB_scrape.csv')
 
+	#merges and renames column since values have different column names in NIST database 
+	#output: TECRDB/amalgamated_TECR_scrape.csv
     def amalgamate(self, zip_path = None):
         def merge_cells(re_search, col_name, printed):
             if re.search(re_search, this_column):
@@ -200,6 +206,7 @@ class TECRDB():
             }
         print('\nColumns:\n', '='*len('Columns:'))
         for this_column in df:
+            print(this_column)
             printed = False
             if 'index' in this_column:
                 continue
@@ -251,6 +258,15 @@ class TECRDB():
                             if not re.search(row[this_column], row['solvent ']):
                                 df.at[index, 'solvent '] = row['solvent '] + '  +  ' + row[this_column]
                     combined_columns.add(this_column)
+                elif this_column in ["K'"]:
+                    print('k column found')
+                    if not printed:
+                        print('combined\t', this_column)
+                        printed = True
+                    if row[this_column] not in [' ', '?']:
+                        if ['K<sub>c</sub>\' '] == ' ':
+                            df.at[index, 'K<sub>c</sub>\' '] = row[this_column] 
+                    combined_columns.add(this_column)
                 else:
                     if not printed:
                         print('not combined\t', this_column)
@@ -280,7 +296,7 @@ class TECRDB():
             }, inplace = True)
         
         self.amalgamated_df = df
-        self.amalgamated_df.to_csv("TECRDB/amalgamated_TECRDB_scrape_v2.csv") 
+        self.amalgamated_df.to_csv("TECRDB/amalgamated_TECRDB_scrape.csv") 
             
         # count down for processing and organizing the data
         def assign_values(col, reference_list, values_list, temperatures_list, ph_list, added):
@@ -371,7 +387,7 @@ class TECRDB():
             count += 1
         
         #export the database dictionary as a JSON file
-        with open('TECRDB/TECRDB_consolidated_v2.json', 'w') as output:
+        with open('TECRDB/TECRDB_consolidated.json', 'w') as output:
             json.dump(data_per_enzyme, output, indent = 4)
         # sleep(2)
         # with ZipFile('TECRDB.zip', 'w', compression = ZIP_LZMA) as zip:
