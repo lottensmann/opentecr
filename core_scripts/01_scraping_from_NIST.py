@@ -242,6 +242,17 @@ class TECRDB():
                             if not re.search(row[this_column], row['Buffer:']):
                                 df.at[index, 'Buffer:'] = str(row['Buffer:']) + ' + ' + row[this_column]
                     combined_columns.add(this_column)
+                elif this_column == 'K\'':
+                    if not printed:
+                        print('combined\t', this_column)
+                        printed = True
+                    if row[this_column] not in [' ', '?']:
+                        if row['K<sub>c</sub>\' '] == ' ':
+                            df.at[index, 'K<sub>c</sub>\' '] = row[this_column]
+                        if row['K<sub>c</sub>\' '] != ' ':
+                            if not re.search(row[this_column], row['K<sub>c</sub>\' ']):
+                                df.at[index, 'K<sub>c</sub>\' '] = str(row['K<sub>c</sub>\' ']) + ' + ' + row[this_column]
+                    combined_columns.add(this_column)
                 elif this_column in ['salt ', 'cosolvent ', 'added solute ', 'protein ', 'added solute ', 
                                    'percent(dimethyl sulfoxide) ', 'p(MPa)']:
                     if not printed:
@@ -257,15 +268,6 @@ class TECRDB():
                         else:
                             if not re.search(row[this_column], row['solvent ']):
                                 df.at[index, 'solvent '] = row['solvent '] + '  +  ' + row[this_column]
-                    combined_columns.add(this_column)
-                elif this_column in ["K'"]:
-                    print('k column found')
-                    if not printed:
-                        print('combined\t', this_column)
-                        printed = True
-                    if row[this_column] not in [' ', '?']:
-                        if ['K<sub>c</sub>\' '] == ' ':
-                            df.at[index, 'K<sub>c</sub>\' '] = row[this_column] 
                     combined_columns.add(this_column)
                 else:
                     if not printed:

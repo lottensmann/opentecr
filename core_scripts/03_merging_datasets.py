@@ -56,6 +56,8 @@ class merge_TECRs():
             self.master_file.insert(4, 'KEGG Reaction:', empty_col)
             self.master_file.insert(5, 'CID Reaction:', empty_col)
         
+        
+   #merges scrapings, outputs merged_TECRDB.csv     
     def merge(self, new_path, new_enzyme_col, new_reference_col, manual_curation_csv_path, excel_sheet):
         self.scraping = new_path.split('_')[-1].split('.')[0]
         print(self.scraping)
