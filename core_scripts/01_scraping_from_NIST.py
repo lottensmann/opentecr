@@ -206,7 +206,6 @@ class TECRDB():
             }
         print('\nColumns:\n', '='*len('Columns:'))
         for this_column in df:
-            print(this_column)
             printed = False
             if 'index' in this_column:
                 continue
@@ -242,6 +241,7 @@ class TECRDB():
                             if not re.search(row[this_column], row['Buffer:']):
                                 df.at[index, 'Buffer:'] = str(row['Buffer:']) + ' + ' + row[this_column]
                     combined_columns.add(this_column)
+                #added because this column was not merged with Keq in the amalgamated version, does not fix this
                 elif this_column == 'K\'':
                     if not printed:
                         print('combined\t', this_column)
